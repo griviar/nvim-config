@@ -1,4 +1,3 @@
--- making line on the bottom of the screen better
 return {
   "nvim-lualine/lualine.nvim",
   dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -63,7 +62,7 @@ return {
             color = { fg = "#ff9e64" },
           },
           { "encoding" },
-          { "fileformat" },
+          { "fileformat", symbols = { unix = "" } },
           { "filetype" },
         },
       },
