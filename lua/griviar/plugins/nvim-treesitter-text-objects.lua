@@ -2,7 +2,18 @@ return {
   "nvim-treesitter/nvim-treesitter-textobjects",
   lazy = true,
   config = function()
-    require("nvim-treesitter.configs").setup({
+    local ok, treesitter = pcall(require, "nvim-treesitter.configs")
+    if not ok then
+      vim.schedule(function()
+        vim.notify(
+          "nvim-treesitter-textobjects requires nvim-treesitter master branch. Run :Lazy restore.",
+          vim.log.levels.WARN
+        )
+      end)
+      return
+    end
+
+    treesitter.setup({
       textobjects = {
         select = {
           enable = true,

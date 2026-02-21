@@ -1,10 +1,21 @@
 return {
   "nvim-treesitter/nvim-treesitter",
+  branch = "master",
   event = { "BufReadPre", "BufNewFile" },
   build = ":TSUpdate",
   config = function()
-    -- import nvim-treesitter plugin
-    local treesitter = require("nvim-treesitter.configs")
+    -- `nvim-treesitter` main branch is a rewrite and removed `nvim-treesitter.configs`.
+    -- Keep startup stable and show what to do if an incompatible version is installed.
+    local ok, treesitter = pcall(require, "nvim-treesitter.configs")
+    if not ok then
+      vim.schedule(function()
+        vim.notify(
+          "Incompatible nvim-treesitter version detected. Run :Lazy restore (or :Lazy sync) to use the pinned master branch.",
+          vim.log.levels.WARN
+        )
+      end)
+      return
+    end
 
     -- configure treesitter
     treesitter.setup({ -- enable syntax highlighting
