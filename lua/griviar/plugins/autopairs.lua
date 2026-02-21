@@ -1,4 +1,3 @@
--- add closing qoutas to the end
 return {
   "windwp/nvim-autopairs",
   event = { "InsertEnter" },
