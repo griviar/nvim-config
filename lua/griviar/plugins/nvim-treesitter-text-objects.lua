@@ -6,7 +6,7 @@ return {
     if not ok then
       vim.schedule(function()
         vim.notify(
-          "nvim-treesitter-textobjects requires nvim-treesitter master branch. Run :Lazy restore.",
+          "nvim-treesitter-textobjects is using legacy configs API and is disabled with nvim-treesitter main.",
           vim.log.levels.WARN
         )
       end)
