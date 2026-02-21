@@ -15,6 +15,8 @@ return {
         "prismals",
         "pyright",
         "eslint",
+        "dockerls",
+        "docker_compose_language_service",
       },
     },
     dependencies = {
@@ -43,6 +45,7 @@ return {
         "black", -- python formatter
         "pylint",
         "eslint_d",
+        "hadolint",
       },
     },
     dependencies = {

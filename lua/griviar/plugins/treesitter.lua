@@ -36,6 +36,24 @@ return {
 
     treesitter.setup({})
 
+    -- Ensure common Dockerfile naming variants get dockerfile filetype.
+    vim.filetype.add({
+      filename = {
+        Dockerfile = "dockerfile",
+        Containerfile = "dockerfile",
+        ["docker-compose.yml"] = "yaml.docker-compose",
+        ["docker-compose.yaml"] = "yaml.docker-compose",
+        ["compose.yml"] = "yaml.docker-compose",
+        ["compose.yaml"] = "yaml.docker-compose",
+      },
+      pattern = {
+        [".*/[Dd]ockerfile%..*"] = "dockerfile",
+        [".*/[Cc]ontainerfile%..*"] = "dockerfile",
+        [".*/docker%-compose%..*%.ya?ml"] = "yaml.docker-compose",
+        [".*/compose%..*%.ya?ml"] = "yaml.docker-compose",
+      },
+    })
+
     local function plugin_revision()
       local lockfile = vim.fn.stdpath("config") .. "/lazy-lock.json"
       if vim.fn.filereadable(lockfile) == 1 then
@@ -78,12 +96,19 @@ return {
     vim.api.nvim_create_autocmd("FileType", {
       group = group,
       callback = function(args)
-        pcall(vim.treesitter.start, args.buf)
+        local ts_ok = pcall(vim.treesitter.start, args.buf)
+        if not ts_ok then
+          if args.match == "dockerfile" then
+            -- Fallback so Dockerfile still has highlighting if parser is unavailable.
+            vim.bo[args.buf].syntax = "dockerfile"
+          end
+        end
         vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
       end,
     })
 
     -- use bash parser for zsh files
     vim.treesitter.language.register("bash", "zsh")
+    vim.treesitter.language.register("yaml", "yaml.docker-compose")
   end,
 }
